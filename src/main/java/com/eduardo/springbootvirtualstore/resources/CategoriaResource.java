@@ -1,8 +1,5 @@
 package com.eduardo.springbootvirtualstore.resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.eduardo.springbootvirtualstore.domain.Categoria;
 import com.eduardo.springbootvirtualstore.services.CategoriaService;
 

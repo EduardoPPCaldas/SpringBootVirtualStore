@@ -4,10 +4,15 @@ import java.util.Arrays;
 
 import com.eduardo.springbootvirtualstore.domain.Categoria;
 import com.eduardo.springbootvirtualstore.domain.Cidade;
+import com.eduardo.springbootvirtualstore.domain.Cliente;
+import com.eduardo.springbootvirtualstore.domain.Endereco;
 import com.eduardo.springbootvirtualstore.domain.Estado;
 import com.eduardo.springbootvirtualstore.domain.Produto;
+import com.eduardo.springbootvirtualstore.domain.enums.TipoCliente;
 import com.eduardo.springbootvirtualstore.repositories.CategoriaRepository;
 import com.eduardo.springbootvirtualstore.repositories.CidadeRepository;
+import com.eduardo.springbootvirtualstore.repositories.ClienteRepository;
+import com.eduardo.springbootvirtualstore.repositories.EnderecoRepository;
 import com.eduardo.springbootvirtualstore.repositories.EstadoRepository;
 import com.eduardo.springbootvirtualstore.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class SpringbootvirtualstoreApplication implements CommandLineRunner {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
+
+	@Autowired
+	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 
 	public static void main(String[] args) {
@@ -68,6 +79,15 @@ public class SpringbootvirtualstoreApplication implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("34245252", "34208096"));
+		Endereco e1 = new Endereco(null, "Rua Flores", "29", "ap 102", "Centro", "45000315", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "sala 102", "Centro", "45000315", cli1, c2);
+
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+
+		clienteRepository.save(cli1);
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 	}
 
 }

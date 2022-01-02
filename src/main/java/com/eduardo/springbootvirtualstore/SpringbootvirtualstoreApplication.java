@@ -1,5 +1,6 @@
 package com.eduardo.springbootvirtualstore;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import com.eduardo.springbootvirtualstore.domain.Categoria;
@@ -7,13 +8,20 @@ import com.eduardo.springbootvirtualstore.domain.Cidade;
 import com.eduardo.springbootvirtualstore.domain.Cliente;
 import com.eduardo.springbootvirtualstore.domain.Endereco;
 import com.eduardo.springbootvirtualstore.domain.Estado;
+import com.eduardo.springbootvirtualstore.domain.Pagamento;
+import com.eduardo.springbootvirtualstore.domain.PagamentoComBoleto;
+import com.eduardo.springbootvirtualstore.domain.PagamentoComCartao;
+import com.eduardo.springbootvirtualstore.domain.Pedido;
 import com.eduardo.springbootvirtualstore.domain.Produto;
+import com.eduardo.springbootvirtualstore.domain.enums.EstadoPagamento;
 import com.eduardo.springbootvirtualstore.domain.enums.TipoCliente;
 import com.eduardo.springbootvirtualstore.repositories.CategoriaRepository;
 import com.eduardo.springbootvirtualstore.repositories.CidadeRepository;
 import com.eduardo.springbootvirtualstore.repositories.ClienteRepository;
 import com.eduardo.springbootvirtualstore.repositories.EnderecoRepository;
 import com.eduardo.springbootvirtualstore.repositories.EstadoRepository;
+import com.eduardo.springbootvirtualstore.repositories.PagamentoRepository;
+import com.eduardo.springbootvirtualstore.repositories.PedidoRepository;
 import com.eduardo.springbootvirtualstore.repositories.ProdutoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +49,12 @@ public class SpringbootvirtualstoreApplication implements CommandLineRunner {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 
 
 	public static void main(String[] args) {
@@ -88,6 +102,20 @@ public class SpringbootvirtualstoreApplication implements CommandLineRunner {
 
 		clienteRepository.save(cli1);
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 	}
 
 }

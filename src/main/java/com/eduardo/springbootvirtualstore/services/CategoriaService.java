@@ -1,5 +1,6 @@
 package com.eduardo.springbootvirtualstore.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.eduardo.springbootvirtualstore.domain.Categoria;
@@ -22,6 +23,11 @@ public class CategoriaService {
         return obj.orElseThrow(() -> new ObjectNotFoundException(
             "Objeto nao encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()
         ));
+    }
+
+    public List<Categoria> list(){
+        List<Categoria> list = repo.findAll();
+        return list;
     }
 
     public Categoria insert(Categoria categoria){

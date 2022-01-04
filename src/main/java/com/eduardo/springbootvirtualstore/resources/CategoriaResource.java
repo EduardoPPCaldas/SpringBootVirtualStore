@@ -1,8 +1,11 @@
 package com.eduardo.springbootvirtualstore.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.eduardo.springbootvirtualstore.domain.Categoria;
+import com.eduardo.springbootvirtualstore.dto.CategoriaDTO;
 import com.eduardo.springbootvirtualstore.services.CategoriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,13 @@ public class CategoriaResource {
     public ResponseEntity<Categoria> find(@PathVariable Integer id){
         Categoria obj = service.find(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoriaDTO>> list(){
+        List<Categoria> list = service.list();
+        List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDto);
     }
 
     @PostMapping

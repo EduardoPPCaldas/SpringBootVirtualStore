@@ -22,7 +22,8 @@ public class CategoriaService {
         ));
     }
 
-    public Categoria create(Categoria categoria){
+    public Categoria insert(Categoria categoria){
+        categoria.setId(null);
         return repo.save(categoria);
     }
 }

@@ -1,5 +1,7 @@
 package com.eduardo.springbootvirtualstore.resources;
 
+import java.net.URI;
+
 import com.eduardo.springbootvirtualstore.domain.Categoria;
 import com.eduardo.springbootvirtualstore.services.CategoriaService;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -26,8 +29,9 @@ public class CategoriaResource {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Categoria categoria){
-        Categoria obj = service.create(categoria);
-        return ResponseEntity.ok().body(obj);
+    public ResponseEntity<Void> insert(@RequestBody Categoria categoria){
+        Categoria obj = service.insert(categoria);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 }

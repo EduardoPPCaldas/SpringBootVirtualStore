@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import com.eduardo.springbootvirtualstore.domain.Categoria;
 import com.eduardo.springbootvirtualstore.dto.CategoriaDTO;
 import com.eduardo.springbootvirtualstore.services.CategoriaService;
@@ -43,16 +45,18 @@ public class CategoriaResource {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insert(@RequestBody Categoria categoria){
-        Categoria obj = service.insert(categoria);
+    public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoria){
+        Categoria obj = service.fromDTO(categoria);
+        obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Void> update(@RequestBody Categoria categoria, @PathVariable Integer id){
-        categoria.setId(id);
-        categoria = service.update(categoria);
+    public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO categoria, @PathVariable Integer id){
+        Categoria obj = service.fromDTO(categoria);
+        obj.setId(id);
+        obj = service.update(obj);
         return ResponseEntity.noContent().build();
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.eduardo.springbootvirtualstore.domain.Categoria;
+import com.eduardo.springbootvirtualstore.dto.CategoriaDTO;
 import com.eduardo.springbootvirtualstore.repositories.CategoriaRepository;
 import com.eduardo.springbootvirtualstore.services.exceptions.DataIntegrityException;
 import com.eduardo.springbootvirtualstore.services.exceptions.ObjectNotFoundException;
@@ -56,5 +57,9 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
         return repo.findAll(pageRequest);
+    }
+    
+    public Categoria fromDTO(CategoriaDTO categoriaDTO){
+        return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
     }
 }

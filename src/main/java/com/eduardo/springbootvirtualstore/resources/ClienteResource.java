@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import com.eduardo.springbootvirtualstore.domain.Cliente;
 import com.eduardo.springbootvirtualstore.dto.ClienteDTO;
+import com.eduardo.springbootvirtualstore.dto.ClienteNewDTO;
 import com.eduardo.springbootvirtualstore.services.ClienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class ClienteResource {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO cliente){
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO cliente){
         Cliente obj = service.fromDTO(cliente);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();

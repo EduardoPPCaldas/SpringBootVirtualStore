@@ -75,16 +75,24 @@ public class SpringbootvirtualstoreApplication implements CommandLineRunner {
 		Produto p1 = new Produto(null, "Computador", 2000.00);
 		Produto p2 = new Produto(null, "Impressora", 800.00);
 		Produto p3 = new Produto(null, "Mouse", 80.00);
+		Produto p4 = new Produto(null, "Mesa de escritorio", 300.00);
+		Produto p5 = new Produto(null, "Toalha", 50.00);
+		Produto p6 = new Produto(null, "Tv true color", 1200.00);
 
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
-		cat2.getProdutos().add(p2);
+		cat2.getProdutos().addAll(Arrays.asList(p2, p4));
+		cat3.getProdutos().addAll(Arrays.asList(p5));
+		cat4.getProdutos().addAll(Arrays.asList(p6));
 
 		p1.getCategorias().add(cat1);
 		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
 		p3.getCategorias().add(cat1);
+		p4.getCategorias().addAll(Arrays.asList(cat2));
+		p5.getCategorias().addAll(Arrays.asList(cat3));
+		p6.getCategorias().addAll(Arrays.asList(cat4));
 
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4));
-		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6));
 
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");

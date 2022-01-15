@@ -3,6 +3,8 @@ package com.eduardo.springbootvirtualstore.config;
 import java.text.ParseException;
 
 import com.eduardo.springbootvirtualstore.services.DBService;
+import com.eduardo.springbootvirtualstore.services.EmailService;
+import com.eduardo.springbootvirtualstore.services.SmtpEmailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,5 +28,10 @@ public class DevConfig {
         }
         dbService.instantiateTestDatabase();
         return true;
+    }
+
+    @Bean
+    public EmailService emailService(){
+        return new SmtpEmailService();
     }
 }

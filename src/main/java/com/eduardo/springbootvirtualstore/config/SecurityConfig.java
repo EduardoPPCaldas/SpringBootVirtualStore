@@ -3,6 +3,7 @@ package com.eduardo.springbootvirtualstore.config;
 import java.util.Arrays;
 
 import com.eduardo.springbootvirtualstore.security.JWTAuthenticationFilter;
+import com.eduardo.springbootvirtualstore.security.JWTAuthorizationFilter;
 import com.eduardo.springbootvirtualstore.security.JWTUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService  userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private Environment env;
@@ -54,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
         http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

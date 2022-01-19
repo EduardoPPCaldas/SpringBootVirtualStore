@@ -6,11 +6,14 @@ import java.util.Optional;
 import com.eduardo.springbootvirtualstore.domain.Cidade;
 import com.eduardo.springbootvirtualstore.domain.Cliente;
 import com.eduardo.springbootvirtualstore.domain.Endereco;
+import com.eduardo.springbootvirtualstore.domain.enums.Perfil;
 import com.eduardo.springbootvirtualstore.domain.enums.TipoCliente;
 import com.eduardo.springbootvirtualstore.dto.ClienteDTO;
 import com.eduardo.springbootvirtualstore.dto.ClienteNewDTO;
 import com.eduardo.springbootvirtualstore.repositories.ClienteRepository;
 import com.eduardo.springbootvirtualstore.repositories.EnderecoRepository;
+import com.eduardo.springbootvirtualstore.security.UserSS;
+import com.eduardo.springbootvirtualstore.services.exceptions.AuthorizationException;
 import com.eduardo.springbootvirtualstore.services.exceptions.DataIntegrityException;
 import com.eduardo.springbootvirtualstore.services.exceptions.ObjectNotFoundException;
 
@@ -35,6 +38,12 @@ public class ClienteService {
     private BCryptPasswordEncoder pe;
 
     public Cliente find(Integer id){
+        UserSS user = UserService.authenticated();
+
+        if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())){
+            throw new AuthorizationException("Acesso negado");
+        }
+
         Optional<Cliente> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()

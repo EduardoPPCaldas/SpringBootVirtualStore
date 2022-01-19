@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.eduardo.springbootvirtualstore.domain.Cliente;
 import com.eduardo.springbootvirtualstore.domain.ItemPedido;
 import com.eduardo.springbootvirtualstore.domain.PagamentoComBoleto;
 import com.eduardo.springbootvirtualstore.domain.Pedido;
@@ -12,9 +13,14 @@ import com.eduardo.springbootvirtualstore.domain.enums.EstadoPagamento;
 import com.eduardo.springbootvirtualstore.repositories.ItemPedidoRepository;
 import com.eduardo.springbootvirtualstore.repositories.PagamentoRepository;
 import com.eduardo.springbootvirtualstore.repositories.PedidoRepository;
+import com.eduardo.springbootvirtualstore.security.UserSS;
+import com.eduardo.springbootvirtualstore.services.exceptions.AuthorizationException;
 import com.eduardo.springbootvirtualstore.services.exceptions.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -68,5 +74,17 @@ public class PedidoService {
         itemPedidoRepository.saveAll(obj.getItens());
         emailService.sendOrderConfirmationHtmlEmail(obj);
         return obj;
+    }
+
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+        UserSS user = UserService.authenticated();
+
+        if(user == null){
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+        Cliente cliente = clienteService.find(user.getId());
+        return repo.findByCliente(cliente, pageRequest);
     }
 }

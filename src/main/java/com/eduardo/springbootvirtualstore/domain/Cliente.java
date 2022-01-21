@@ -54,6 +54,8 @@ public class Cliente implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 
+    private String imageUrl;
+
     public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
         this.id = id;
         this.nome = nome;
@@ -62,6 +64,14 @@ public class Cliente implements Serializable {
         this.tipo = tipo == null ? null : tipo.getCod();
         this.senha = senha;
         addPerfil(Perfil.CLIENTE);
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getSenha() {

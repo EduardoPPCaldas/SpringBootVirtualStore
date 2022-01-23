@@ -62,6 +62,12 @@ public class ClienteResource {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping(value = "/email")
+    public ResponseEntity<Cliente> find(@RequestParam(value = "value") String email){
+        Cliente obj = service.findByEmail(email);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
